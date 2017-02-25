@@ -2,6 +2,8 @@ package aiyuan1996.cn.firerunning;
 
 import android.app.Application;
 
+import com.fengmap.android.FMMapSDK;
+
 import org.litepal.LitePal;
 
 import aiyuan1996.cn.firerunning.Utils.ConfigUtils;
@@ -23,7 +25,7 @@ public class MyApplication extends Application{
         myApplication = this;
         JPushInterface.setDebugMode(true);
         JPushInterface.init(getApplicationContext());
-
+        FMMapSDK.init(this);
         // 读取配置文件
         ConfigUtils.getInstance().readConfig();
         // 依赖注入框架ButterKnife

@@ -1,10 +1,9 @@
 package aiyuan1996.cn.firerunning.ui;
 
 import android.Manifest;
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -16,16 +15,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -36,8 +30,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-
 import org.litepal.tablemanager.Connector;
 
 import java.io.BufferedOutputStream;
@@ -47,6 +39,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import aiyuan1996.cn.firerunning.R;
+import aiyuan1996.cn.firerunning.Utils.PictureUtil;
 import aiyuan1996.cn.firerunning.Utils.PushUtil;
 import aiyuan1996.cn.firerunning.Utils.ToastUtils;
 import aiyuan1996.cn.firerunning.entity.UserEntity;
@@ -62,8 +55,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by aiyuan on 2017/2/20
  */
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends Activity implements NavigationView.OnNavigationItemSelectedListener {
     public static boolean isForeground = false;
     private static final String TAG = "MainActivity";
     private android.support.v7.app.AlertDialog photoDialog;
@@ -77,30 +69,10 @@ public class MainActivity extends AppCompatActivity
     TextView tel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
         //初始化数据库
         Connector.getDatabase();
-
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View navHeaderView = navigationView.inflateHeaderView(R.layout.nav_header_main);
@@ -115,36 +87,24 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle(R.string.dialog_title).setMessage(R.string.dialog_message);
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(MainActivity.this,"从服务器获取地图",Toast.LENGTH_SHORT).show();
-            }
-        });
-        builder.setCancelable(false);
-        builder.create().show();
-        initview();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//        builder.setTitle(R.string.dialog_title).setMessage(R.string.dialog_message);
+//        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                Toast.makeText(MainActivity.this,"从服务器获取地图",Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        builder.setCancelable(false);
+//        builder.create().show();
+
+
+        PictureUtil pictureUtil = new PictureUtil(getApplicationContext());
+        pictureUtil.initview();
         registerMessageReceiver();  // used for receive msg
+
     }
 
-    private void initview() {
-        if (BmobUser.getCurrentUser()!=null) {
-            Log.d(TAG, "BmobUser.getCurrentUser()!=null");
-            UserEntity userEntity = BmobUser.getCurrentUser(UserEntity.class);
-            if (userEntity.getAvatar()!=null) {
-                Log.d(TAG, "userEntity.getAvatar()!=null");
-
-                if(userEntity.getAvatar().getFileUrl() != null){
-                    Log.d(TAG, "图片不为空");
-                    Glide.with(MainActivity.this).load(userEntity.getAvatar().getFileUrl()).into(userImage);
-                }else{
-                    Log.d(TAG, "图片为空");
-                }
-            }
-        }
-    }
 
     /**
      * 点击头像的提示对话框
