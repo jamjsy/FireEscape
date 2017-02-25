@@ -16,7 +16,7 @@ import java.util.Iterator;
 
 import aiyuan1996.cn.firerunning.Utils.PushUtil;
 import aiyuan1996.cn.firerunning.entity.HistoryUrl;
-import aiyuan1996.cn.firerunning.ui.MainActivity;
+import aiyuan1996.cn.firerunning.map.LocateActivity;
 import aiyuan1996.cn.firerunning.ui.PushActivity.TestActivity;
 import cn.jpush.android.api.JPushInterface;
 
@@ -125,16 +125,16 @@ public class MyReceiver extends BroadcastReceiver {
 	}
 	//send msg to MainActivity
 	private void processCustomMessage(Context context, Bundle bundle) {
-		if (MainActivity.isForeground) {
+		if (LocateActivity.isForeground) {
 			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
 			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-			Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
-			msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
+			Intent msgIntent = new Intent(LocateActivity.MESSAGE_RECEIVED_ACTION);
+			msgIntent.putExtra(LocateActivity.KEY_MESSAGE, message);
 			if (!PushUtil.isEmpty(extras)) {
 				try {
 					JSONObject extraJson = new JSONObject(extras);
 					if (extraJson.length() > 0) {
-						msgIntent.putExtra(MainActivity.KEY_EXTRAS, extras);
+						msgIntent.putExtra(LocateActivity.KEY_EXTRAS, extras);
 					}
 				} catch (JSONException e) {
 

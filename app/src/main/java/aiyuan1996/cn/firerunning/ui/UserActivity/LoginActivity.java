@@ -14,7 +14,7 @@ import aiyuan1996.cn.firerunning.R;
 import aiyuan1996.cn.firerunning.Utils.SPUtils;
 import aiyuan1996.cn.firerunning.Utils.ToastUtils;
 import aiyuan1996.cn.firerunning.entity.UserEntity;
-import aiyuan1996.cn.firerunning.ui.MainActivity;
+import aiyuan1996.cn.firerunning.map.LocateActivity;
 import aiyuan1996.cn.firerunning.ui.view.CustomDialog;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                     dialog.dismiss();
                     if (user != null) {
                         Log.d(TAG, "用户登陆成功");
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent intent = new Intent(LoginActivity.this, LocateActivity.class);
                         intent.putExtra("tel",phone);
                         startActivity(intent);
                     } else {

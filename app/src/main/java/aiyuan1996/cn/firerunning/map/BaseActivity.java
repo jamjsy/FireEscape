@@ -1,18 +1,14 @@
 package aiyuan1996.cn.firerunning.map;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.fengmap.android.analysis.navi.FMNaviAnalyser;
 import com.fengmap.android.analysis.navi.FMNaviResult;
@@ -35,8 +31,6 @@ import java.util.ArrayList;
 import aiyuan1996.cn.firerunning.R;
 import aiyuan1996.cn.firerunning.Utils.FileUtils;
 import aiyuan1996.cn.firerunning.Utils.ViewHelper;
-import aiyuan1996.cn.firerunning.ui.PushActivity.webViewActivity;
-import aiyuan1996.cn.firerunning.ui.SettingsActivity;
 import aiyuan1996.cn.firerunning.widget.NavigationBar;
 
 /**
@@ -95,8 +89,8 @@ public abstract class BaseActivity extends Activity implements OnFMMapInitListen
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 //
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.drawer_view);
-//        navigationView.setNavigationItemSelectedListener(this);
+       NavigationView navigationView = (NavigationView) findViewById(R.id.drawer_view);
+        navigationView.setNavigationItemSelectedListener(this);
 //
     }
 
@@ -106,27 +100,27 @@ public abstract class BaseActivity extends Activity implements OnFMMapInitListen
     }
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        Intent intent;
-        Context context = getApplicationContext();
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-            Toast.makeText(this,"nav_camera",Toast.LENGTH_SHORT).show();
-
-        } else if (id == R.id.nav_contacts) {
-            //Log.d(TAG, "onNavigationItemSelected: nav_contacts"  );
-            Toast.makeText(this,"nav_contacts",Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_push) {
-            intent = new Intent(context,webViewActivity.class);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_settings) {
-            intent = new Intent(context,SettingsActivity.class);
-            startActivity(intent);
-        }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+//        // Handle navigation view item clicks here.
+//        int id = item.getItemId();
+//        Intent intent;
+//        Context context = getApplicationContext();
+//        if (id == R.id.nav_camera) {
+//            // Handle the camera action
+//            Toast.makeText(this,"nav_camera",Toast.LENGTH_SHORT).show();
+//
+//        } else if (id == R.id.nav_contacts) {
+//            //Log.d(TAG, "onNavigationItemSelected: nav_contacts"  );
+//            Toast.makeText(this,"nav_contacts",Toast.LENGTH_SHORT).show();
+//        } else if (id == R.id.nav_push) {
+//            intent = new Intent(context,webViewActivity.class);
+//            startActivity(intent);
+//
+//        } else if (id == R.id.nav_settings) {
+//            intent = new Intent(context,SettingsActivity.class);
+//            startActivity(intent);
+//        }
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -155,6 +149,7 @@ public abstract class BaseActivity extends Activity implements OnFMMapInitListen
      */
     public void setContentView(int layoutId) {
         View view = View.inflate(getBaseContext(), layoutId, null);
+        //View view = View.inflate(getApplicationContext(), layoutId, null);
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT);
         lp.addRule(RelativeLayout.BELOW, R.id.navigation_bar);
@@ -202,14 +197,14 @@ public abstract class BaseActivity extends Activity implements OnFMMapInitListen
         //TODO 获取到最新地图更新的信息，可以进行地图的下载操作
         return false;
     }
-
-    @Override
-    public void onBackPressed() {
-        if (mFMMap != null) {
-            mFMMap.onDestroy();
-        }
-        super.onBackPressed();
-    }
+//
+//    @Override
+//    public void onBackPressed() {
+//        if (mFMMap != null) {
+//            mFMMap.onDestroy();
+//        }
+//        super.onBackPressed();
+//    }
 
     /**
      * 清理所有的线与图层

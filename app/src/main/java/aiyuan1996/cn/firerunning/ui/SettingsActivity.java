@@ -29,13 +29,13 @@ public class SettingsActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent;
                 if(position == 0){
-                    intent = new Intent(getApplicationContext(), PushSetActivity.class);
+                    intent = new Intent(SettingsActivity.this, PushSetActivity.class);
                     startActivity(intent);
                 }else if(position == 1){
-                    intent = new Intent(getApplicationContext(),UserManagerActivity.class);
+                    intent = new Intent(SettingsActivity.this,UserManagerActivity.class);
                     startActivity(intent);
                 }else if(position == 2){
-                    intent = new Intent(getApplicationContext(),AddSafeContactsActivity.class);
+                    intent = new Intent(SettingsActivity.this,AddSafeContactsActivity.class);
                     startActivity(intent);
                 }
 

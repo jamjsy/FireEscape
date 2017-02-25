@@ -252,10 +252,10 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
             return total/num;
         }
     }
-    @Override
-    public void onBackPressed() {
-        if(flag!=0)
-            unregisterReceiver(wifiReceiver);
-        super.onBackPressed();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        if(flag!=0)
+//            unregisterReceiver(wifiReceiver);
+//        super.onBackPressed();
+//    }
 }

@@ -224,7 +224,7 @@ public class PushSetActivity extends ActionBarActivity {
 				case 6002:
 					logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
 					Log.i(TAG, logs);
-					if (PushUtil.isConnected(getApplicationContext())) {
+					if (PushUtil.isConnected(PushSetActivity.this)) {
 						mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_ALIAS, alias), 1000 * 60);
 					} else {
 						Log.i(TAG, "No network");
@@ -236,7 +236,7 @@ public class PushSetActivity extends ActionBarActivity {
 					Log.e(TAG, logs);
 			}
 
-			PushUtil.showToast(logs, getApplicationContext());
+			PushUtil.showToast(logs, PushSetActivity.this);
 		}
 
 	};
@@ -255,7 +255,7 @@ public class PushSetActivity extends ActionBarActivity {
 				case 6002:
 					logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
 					Log.i(TAG, logs);
-					if (PushUtil.isConnected(getApplicationContext())) {
+					if (PushUtil.isConnected(PushSetActivity.this)) {
 						mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_SET_TAGS, tags), 1000 * 60);
 					} else {
 						Log.i(TAG, "No network");
@@ -267,7 +267,7 @@ public class PushSetActivity extends ActionBarActivity {
 					Log.e(TAG, logs);
 			}
 
-			PushUtil.showToast(logs, getApplicationContext());
+			PushUtil.showToast(logs, PushSetActivity.this);
 		}
 
 	};
@@ -283,12 +283,12 @@ public class PushSetActivity extends ActionBarActivity {
 			switch (msg.what) {
 				case MSG_SET_ALIAS:
 					Log.d(TAG, "Set alias in handler.");
-					JPushInterface.setAliasAndTags(getApplicationContext(), (String) msg.obj, null, mAliasCallback);
+					JPushInterface.setAliasAndTags(PushSetActivity.this, (String) msg.obj, null, mAliasCallback);
 					break;
 
 				case MSG_SET_TAGS:
 					Log.d(TAG, "Set tags in handler.");
-					JPushInterface.setAliasAndTags(getApplicationContext(), null, (Set<String>) msg.obj, mTagsCallback);
+					JPushInterface.setAliasAndTags(PushSetActivity.this, null, (Set<String>) msg.obj, mTagsCallback);
 					break;
 
 				default:
