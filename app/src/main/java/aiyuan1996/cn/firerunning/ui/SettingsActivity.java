@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import aiyuan1996.cn.firerunning.R;
+import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
 import aiyuan1996.cn.firerunning.ui.PushActivity.PushSetActivity;
 import aiyuan1996.cn.firerunning.ui.UserActivity.UserManagerActivity;
 
@@ -20,6 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        ActivityCollector.addActivity(this);
         listView = (ListView)findViewById(R.id.list_settings);
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(SettingsActivity.this,
                 android.R.layout.simple_list_item_1,settings_item);
@@ -41,5 +43,11 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

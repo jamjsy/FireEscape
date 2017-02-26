@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import aiyuan1996.cn.firerunning.R;
+import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
 
 public class UserManagerActivity extends AppCompatActivity {
     private ListView listView;
@@ -19,6 +20,7 @@ public class UserManagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_manage);
+        ActivityCollector.addActivity(this);
         listView = (ListView)findViewById(R.id.user_manage);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(UserManagerActivity.this,
                 android.R.layout.simple_list_item_1,user_manage_item);
@@ -30,10 +32,15 @@ public class UserManagerActivity extends AppCompatActivity {
                     intent = new Intent(UserManagerActivity.this,ChangePasswordActivity.class);
                     startActivity(intent);
                 }else if (position == 1){
-                    intent = new Intent(UserManagerActivity.this,LoginActivity.class);
-                    startActivity(intent);
+                    ActivityCollector.finishAll();
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

@@ -25,6 +25,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -46,6 +47,7 @@ import java.io.IOException;
 import java.util.List;
 
 import aiyuan1996.cn.firerunning.R;
+import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
 import aiyuan1996.cn.firerunning.Utils.PushUtil;
 import aiyuan1996.cn.firerunning.Utils.ToastUtils;
 import aiyuan1996.cn.firerunning.Utils.UserService;
@@ -90,6 +92,8 @@ public class LocateActivity extends BaseActivity{
     private double correctL=12150000;
     private double correctT=4070000;
 
+    private long mExitTime = 0;
+
     CircleImageView userImage;
     TextView tel;
     private android.support.v7.app.AlertDialog photoDialog;
@@ -106,6 +110,7 @@ public class LocateActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_locate);
+        ActivityCollector.addActivity(this);
 
         //初始化数据库
         Connector.getDatabase();
@@ -285,6 +290,7 @@ public class LocateActivity extends BaseActivity{
         unregisterReceiver(mMessageReceiver);
         unregisterReceiver(wifiReceiver);
         super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
     @Override
     protected void onResume() {
@@ -300,15 +306,34 @@ public class LocateActivity extends BaseActivity{
     }
 
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+//    @Override
+//    public void onBackPressed() {
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
+//            super.onBackPressed();
+//        }
+//        ActivityCollector.finishAll();
+//    }
+
+
+      @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+      if (keyCode == KeyEvent.KEYCODE_BACK) {
+          if ((System.currentTimeMillis() - mExitTime) > 2000) {//
+              // 如果两次按键时间间隔大于2000毫秒，则不退出
+              Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+              mExitTime = System.currentTimeMillis();// 更新mExitTime
+          } else {
+              System.exit(0);// 否则退出程序
+          }
+          return true;
+      }
+          ActivityCollector.finishAll();
+      return super.onKeyDown(keyCode, event);
+
+  }
 
     public final Activity getActivity(){
         return LocateActivity.this;

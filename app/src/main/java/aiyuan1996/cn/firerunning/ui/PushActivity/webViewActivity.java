@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aiyuan1996.cn.firerunning.R;
+import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
 import aiyuan1996.cn.firerunning.adapter.WebViewAdapter;
 import aiyuan1996.cn.firerunning.entity.HistoryUrl;
 
@@ -24,6 +25,7 @@ public class webViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_view);
+        ActivityCollector.addActivity(this);
         swipeReflush = (SwipeRefreshLayout)findViewById(R.id.swipe_reflush);
         swipeReflush.setColorSchemeResources(R.color.colorPrimary);
         swipeReflush.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -47,4 +49,9 @@ public class webViewActivity extends AppCompatActivity {
         swipeReflush.setRefreshing(false);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 }

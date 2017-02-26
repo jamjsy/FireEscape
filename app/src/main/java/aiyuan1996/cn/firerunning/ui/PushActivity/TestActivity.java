@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 
+import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
 import cn.jpush.android.api.JPushInterface;
 
 /**
@@ -16,6 +17,7 @@ public class TestActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityCollector.addActivity(this);
         TextView tv = new TextView(this);
         tv.setText("用户自定义打开的Activity");
         Intent intent = getIntent();
@@ -28,4 +30,9 @@ public class TestActivity extends Activity {
         addContentView(tv, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 }

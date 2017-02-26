@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import aiyuan1996.cn.firerunning.R;
+import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
 import aiyuan1996.cn.firerunning.Utils.ContactInfoParser;
 import aiyuan1996.cn.firerunning.adapter.ContactAdapter;
 import aiyuan1996.cn.firerunning.entity.ContactInfo;
@@ -30,6 +31,7 @@ public class AddSafeContactsActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_add_safe_contacts);
+        ActivityCollector.addActivity(this);
         contactInfoList = new ArrayList<ContactInfo>();
         initView();
     }
@@ -100,5 +102,11 @@ public class AddSafeContactsActivity extends AppCompatActivity{
                 Toast.makeText(this, "Until you grant the permission, we canot display the names", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 }

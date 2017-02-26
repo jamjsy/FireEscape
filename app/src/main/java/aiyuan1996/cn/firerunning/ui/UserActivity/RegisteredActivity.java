@@ -11,6 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import aiyuan1996.cn.firerunning.R;
+import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
 import aiyuan1996.cn.firerunning.Utils.ToastUtils;
 import aiyuan1996.cn.firerunning.entity.UserEntity;
 import butterknife.BindView;
@@ -45,6 +46,7 @@ public class RegisteredActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registered);
+        ActivityCollector.addActivity(this);
         ButterKnife.bind(this);
     }
 
@@ -150,4 +152,9 @@ public class RegisteredActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 }

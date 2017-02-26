@@ -23,6 +23,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import aiyuan1996.cn.firerunning.R;
+import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
 import aiyuan1996.cn.firerunning.Utils.PushUtil;
 import cn.jpush.android.api.BasicPushNotificationBuilder;
 import cn.jpush.android.api.CustomPushNotificationBuilder;
@@ -48,6 +49,7 @@ public class PushSetActivity extends ActionBarActivity {
 		Log.d(TAG, "进入PushSetActivity");
 		super.onCreate(icicle);
 		setContentView(R.layout.push_set_dialog);
+		ActivityCollector.addActivity(this);
 		listView = (ListView)findViewById(R.id.list_push_set);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(PushSetActivity.this,
 				android.R.layout.simple_list_item_1,settings_item);
@@ -297,4 +299,9 @@ public class PushSetActivity extends ActionBarActivity {
 		}
 	};
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ActivityCollector.removeActivity(this);
+	}
 }

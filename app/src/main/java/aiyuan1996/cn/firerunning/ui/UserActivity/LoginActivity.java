@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import aiyuan1996.cn.firerunning.R;
+import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
 import aiyuan1996.cn.firerunning.Utils.SPUtils;
 import aiyuan1996.cn.firerunning.Utils.ToastUtils;
 import aiyuan1996.cn.firerunning.entity.UserEntity;
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ActivityCollector.addActivity(this);
         ButterKnife.bind(this);
         initView();
     }
@@ -86,8 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("tel",phone);
                         startActivity(intent);
                     } else {
-                        //ToastUtils.showShort(getApplicationContext(), getString(R.string.text_login_failure)+ e.toString());
-                        Log.d(TAG, "用户登陆失败");
+                        ToastUtils.showShort(getApplicationContext(), getString(R.string.text_login_failure)+ e.toString());
                     }
                 }
             });
@@ -112,6 +113,6 @@ public class LoginActivity extends AppCompatActivity {
             SPUtils.remove(this, "phone");
             SPUtils.remove(this, "password");
         }
+        ActivityCollector.removeActivity(this);
     }
-
 }

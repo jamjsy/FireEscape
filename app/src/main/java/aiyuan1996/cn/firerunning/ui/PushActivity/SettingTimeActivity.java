@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import aiyuan1996.cn.firerunning.R;
+import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
 import aiyuan1996.cn.firerunning.Utils.PushUtil;
 import cn.jpush.android.api.JPushInterface;
 
@@ -43,6 +44,7 @@ public class SettingTimeActivity extends ActionBarActivity implements OnClickLis
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		setContentView(R.layout.set_push_time);
+		ActivityCollector.addActivity(this);
 		init();
 		initListener();
 	}
@@ -198,5 +200,11 @@ public class SettingTimeActivity extends ActionBarActivity implements OnClickLis
 		mThursday.setChecked(isChecked);
 		mFriday.setChecked(isChecked);
 		mSaturday.setChecked(isChecked);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ActivityCollector.removeActivity(this);
 	}
 }

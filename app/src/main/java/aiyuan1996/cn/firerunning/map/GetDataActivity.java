@@ -19,6 +19,7 @@ import com.fengmap.android.map.geometry.FMMapCoord;
 import java.util.List;
 
 import aiyuan1996.cn.firerunning.R;
+import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
 import aiyuan1996.cn.firerunning.Utils.UserService;
 
 
@@ -53,6 +54,7 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getdata);
+        ActivityCollector.addActivity(this);
         userService=new UserService(this);
         mFMMap.setOnFMMapClickListener(this);
         wm = (WifiManager) getSystemService(wserviceName);
@@ -258,4 +260,11 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
 //            unregisterReceiver(wifiReceiver);
 //        super.onBackPressed();
 //    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 }

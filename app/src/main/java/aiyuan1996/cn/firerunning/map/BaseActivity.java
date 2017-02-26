@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import aiyuan1996.cn.firerunning.R;
+import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
 import aiyuan1996.cn.firerunning.Utils.FileUtils;
 import aiyuan1996.cn.firerunning.Utils.ViewHelper;
 import aiyuan1996.cn.firerunning.widget.NavigationBar;
@@ -85,6 +86,7 @@ public abstract class BaseActivity extends Activity implements OnFMMapInitListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         super.setContentView(R.layout.drawer);
+        ActivityCollector.addActivity(this);
         setTitle();
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -215,6 +217,11 @@ public abstract class BaseActivity extends Activity implements OnFMMapInitListen
         clearEndImageLayer();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
+    }
 
     /**
      * 清除线图层
