@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        ActivityCollector.addActivity(this);
+        //ActivityCollector.addActivity(this);
         ButterKnife.bind(this);
         initView();
     }
@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, LocateActivity.class);
                         intent.putExtra("tel",phone);
                         startActivity(intent);
+                        finish();
                     } else {
                         ToastUtils.showShort(getApplicationContext(), getString(R.string.text_login_failure)+ e.toString());
                     }

@@ -52,10 +52,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".ui.PushActivity.PushSetActivity"
             android:label="@string/push_setting"
             android:theme="@style/AppTheme" />

@@ -33,6 +33,7 @@ public class UserManagerActivity extends AppCompatActivity {
                     startActivity(intent);
                 }else if (position == 1){
                     ActivityCollector.finishAll();
+                    //System.exit(0);
                 }
             }
         });
