@@ -201,7 +201,7 @@
             android:value="908a4e7456923581fc2db618d214c172"/>
 
         <activity android:name=".ui.UserActivity.UserManagerActivity" />
-        <activity android:name=".ui.AddSafeContactsActivity"></activity>
+        <activity android:name=".ui.ContactActivity" />
     </application>
 
 </manifest>

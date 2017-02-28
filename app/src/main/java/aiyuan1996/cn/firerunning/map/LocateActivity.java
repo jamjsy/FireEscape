@@ -52,6 +52,7 @@ import aiyuan1996.cn.firerunning.Utils.PushUtil;
 import aiyuan1996.cn.firerunning.Utils.ToastUtils;
 import aiyuan1996.cn.firerunning.Utils.UserService;
 import aiyuan1996.cn.firerunning.entity.UserEntity;
+import aiyuan1996.cn.firerunning.ui.ContactActivity;
 import aiyuan1996.cn.firerunning.ui.PushActivity.webViewActivity;
 import aiyuan1996.cn.firerunning.ui.SettingsActivity;
 import cn.bmob.v3.BmobUser;
@@ -151,7 +152,9 @@ public class LocateActivity extends BaseActivity{
 
         } else if (id == R.id.nav_contacts) {
             //Log.d(TAG, "onNavigationItemSelected: nav_contacts"  );
-            Toast.makeText(this,"nav_contacts",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this,"nav_contacts",Toast.LENGTH_SHORT).show();
+            intent = new Intent(LocateActivity.this, ContactActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_push) {
             intent = new Intent(LocateActivity.this,webViewActivity.class);
             startActivity(intent);

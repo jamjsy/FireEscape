@@ -15,7 +15,7 @@ import aiyuan1996.cn.firerunning.ui.UserActivity.UserManagerActivity;
 
 public class SettingsActivity extends AppCompatActivity {
     private ListView listView;
-    private String[] settings_item = {"推送设置","用户设置","添加安全联系人"};
+    private String[] settings_item = {"推送设置","用户设置"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +35,6 @@ public class SettingsActivity extends AppCompatActivity {
                     startActivity(intent);
                 }else if(position == 1){
                     intent = new Intent(SettingsActivity.this,UserManagerActivity.class);
-                    startActivity(intent);
-                }else if(position == 2){
-                    intent = new Intent(SettingsActivity.this,AddSafeContactsActivity.class);
                     startActivity(intent);
                 }
 

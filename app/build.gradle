@@ -53,4 +53,5 @@ dependencies {
     //bmob兼容Android6.0
     compile 'cn.bmob.android:http-legacy:1.0'
     compile files('libs/fengmap_2.0.0.jar')
+    compile files('libs/pinyin4j-2.5.0.jar')
 }
