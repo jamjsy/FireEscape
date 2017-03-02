@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ZOE.FireEscape.R;
 import com.ZOE.FireEscape.map.GetDataActivity;
@@ -34,7 +35,10 @@ public class NavigationBar extends RelativeLayout {
             }
             if(context instanceof GetDataActivity)
             {
-                ((GetDataActivity) context).onBackPressed();
+                if(((GetDataActivity) context).isGetdataFinished())
+                    ((GetDataActivity) context).onBackPressed();
+                else
+                    Toast.makeText(context, "请等待采样完毕", Toast.LENGTH_SHORT).show();
                 //context.startActivity(new Intent(context , LocateActivity.class));
             }
         }
