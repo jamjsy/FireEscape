@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="aiyuan1996.cn.firerunning">
+    package="com.ZOE.FireEscape">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- Required -->
     <permission
-        android:name="aiyuan1996.cn.firerunning.permission.JPUSH_MESSAGE"
+        android:name="com.ZOE.FireEscape.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
     <!-- Required -->
-    <uses-permission android:name="aiyuan1996.cn.firerunning.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="com.ZOE.FireEscape.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <!-- 允许联网 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -38,13 +38,13 @@
 
 
     <application
-        android:name=".MyApplication"
+        android:name="com.ZOE.FireEscape.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.UserActivity.LoginActivity">
+        <activity android:name="com.ZOE.FireEscape.ui.UserActivity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,39 +52,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.PushActivity.PushSetActivity"
+            android:name="com.ZOE.FireEscape.ui.PushActivity.PushSetActivity"
             android:label="@string/push_setting"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".map.LocateActivity"
+            android:name="com.ZOE.FireEscape.map.LocateActivity"
             android:label="地图" />
         <activity
-            android:name=".ui.PushActivity.TestActivity"
+            android:name="com.ZOE.FireEscape.ui.PushActivity.TestActivity"
             android:label="@string/test_Activity" />
         <activity
-            android:name=".ui.UserActivity.ChangePasswordActivity"
+            android:name="com.ZOE.FireEscape.ui.UserActivity.ChangePasswordActivity"
             android:label="更改密码" />
         <activity
-            android:name=".ui.UserActivity.FindPasswordActivity"
+            android:name="com.ZOE.FireEscape.ui.UserActivity.FindPasswordActivity"
             android:label="找回密码" />
         <activity
-            android:name=".ui.UserActivity.RegisteredActivity"
+            android:name="com.ZOE.FireEscape.ui.UserActivity.RegisteredActivity"
             android:label="用户注册" />
         <activity
-            android:name=".ui.PushActivity.SettingTimeActivity"
+            android:name="com.ZOE.FireEscape.ui.PushActivity.SettingTimeActivity"
             android:label="设置推送时间" />
         <activity
             android:name="cn.jpush.android.ui.PopWinActivity"
             android:exported="false"
             android:theme="@style/MyDialogStyle" />
         <activity
-            android:name=".ui.PushActivity.webViewActivity"
+            android:name="com.ZOE.FireEscape.ui.PushActivity.webViewActivity"
             android:label="@string/push_history" />
         <activity
-            android:name=".map.GetDataActivity"/>
+            android:name="com.ZOE.FireEscape.map.GetDataActivity"/>
 
         <activity
-            android:name=".ui.SettingsActivity"
+            android:name="com.ZOE.FireEscape.ui.SettingsActivity"
             android:label="@string/setting" />
 
         <!-- Required SDK核心功能 -->
@@ -96,7 +96,7 @@
                 <action android:name="cn.jpush.android.ui.PushActivity" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="aiyuan1996.cn.firerunning" />
+                <category android:name="com.ZOE.FireEscape" />
             </intent-filter>
         </activity>
 
@@ -123,7 +123,7 @@
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.DaemonService" />
 
-                <category android:name="aiyuan1996.cn.firerunning" />
+                <category android:name="com.ZOE.FireEscape" />
             </intent-filter>
         </service>
 
@@ -134,7 +134,7 @@
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
 
-                <category android:name="aiyuan1996.cn.firerunning" />
+                <category android:name="comZOEFireEscape" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -151,7 +151,7 @@
 
         <!-- User defined. 用户自定义的广播接收器 -->
         <receiver
-            android:name=".Receiver.MyReceiver"
+            android:name="com.ZOE.FireEscape.Receiver.MyReceiver"
             android:enabled="true">
             <intent-filter>
 
@@ -166,7 +166,7 @@
                 <!-- 接收网络变化 连接/断开 since 1.6.3 -->
                 <action android:name="cn.jpush.android.intent.CONNECTION" />
 
-                <category android:name="aiyuan1996.cn.firerunning" />
+                <category android:name="com.ZOE.FireEscape" />
             </intent-filter>
         </receiver>
 
@@ -194,14 +194,14 @@
         <!-- Required. AppKey copied from Portal -->
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="f92ed7be9e11e4725c02bd3b" />
+            android:value="a69b4fe35d902abc80f3e980" />
         <!--这里输入秘钥-->
         <meta-data
             android:name="com.fengmap.mapapi.appkey"
-            android:value="908a4e7456923581fc2db618d214c172"/>
+            android:value="6576c14948bb04b46f6dcbf04b109b99"/>
 
-        <activity android:name=".ui.UserActivity.UserManagerActivity" />
-        <activity android:name=".ui.ContactActivity" />
+        <activity android:name="com.ZOE.FireEscape.ui.UserActivity.UserManagerActivity" />
+        <activity android:name="com.ZOE.FireEscape.ui.ContactActivity" />
     </application>
 
 </manifest>
