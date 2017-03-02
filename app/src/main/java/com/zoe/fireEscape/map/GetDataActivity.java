@@ -224,4 +224,11 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
         super.onDestroy();
         ActivityCollector.removeActivity(this);
     }
+    @Override
+    public void onBackPressed()
+    {
+        mFMMap.onDestroy();
+        startActivity(new Intent(GetDataActivity.this,LocateActivity.class));
+        this.finish();
+    }
 }

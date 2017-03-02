@@ -11,7 +11,7 @@
         android:background="@null"
         android:paddingTop="10dp"
         android:paddingLeft="15dp"
-        android:src="@drawable/ic_back"
+        android:src="@drawable/ic_more"
         android:visibility="visible"/>
 
     <TextView

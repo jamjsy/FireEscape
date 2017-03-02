@@ -1,7 +1,6 @@
-package aiyuan1996.cn.firerunning.widget;
+package com.ZOE.FireEscape.widget;
 
 import android.content.Context;
-import android.support.v4.widget.DrawerLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +8,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import aiyuan1996.cn.firerunning.R;
-import aiyuan1996.cn.firerunning.map.GetDataActivity;
-import aiyuan1996.cn.firerunning.map.LocateActivity;
+import com.ZOE.FireEscape.R;
+import com.ZOE.FireEscape.map.GetDataActivity;
+import com.ZOE.FireEscape.map.LocateActivity;
 
 /**
  * @Email hezutao@fengmap.com
@@ -23,7 +22,6 @@ public class NavigationBar extends RelativeLayout {
     Context mContext;
     TextView mTitleTxt;
     ImageView mLeftImage;
-    DrawerLayout drawer;
     private OnClickListener mDefaultClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -36,7 +34,7 @@ public class NavigationBar extends RelativeLayout {
             }
             if(context instanceof GetDataActivity)
             {
-                ((GetDataActivity) context).openDrawer();
+                ((GetDataActivity) context).onBackPressed();
                 //context.startActivity(new Intent(context , LocateActivity.class));
             }
         }
@@ -66,6 +64,10 @@ public class NavigationBar extends RelativeLayout {
         LayoutInflater.from(context).inflate(R.layout.widget_navigationbar, this,
                 true);
         mLeftImage = (ImageView) findViewById(R.id.img_left);
+        if(context instanceof GetDataActivity)
+        {
+            mLeftImage.setImageResource(R.drawable.ic_back);
+        }
         mTitleTxt = (TextView) findViewById(R.id.txt_title);
         mTitleTxt.setText("地图显示");
         mLeftImage.setOnClickListener(mDefaultClickListener);
