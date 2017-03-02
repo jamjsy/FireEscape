@@ -1,4 +1,4 @@
-package aiyuan1996.cn.firerunning;
+package com.ZOE.FireEscape;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("aiyuan1996.cn.firerunning", appContext.getPackageName());
+        assertEquals("com.ZOE.fireEscape", appContext.getPackageName());
     }
 }

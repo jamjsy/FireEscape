@@ -3,6 +3,6 @@
     <dbname value="UrlDb"></dbname>
     <version value="1"></version>
     <list>
-        <mapping class="aiyuan1996.cn.firerunning.entity.HistoryUrl"></mapping>
+        <mapping class="com.ZOE.FireEscape.entity.HistoryUrl"></mapping>
     </list>
 </litepal>

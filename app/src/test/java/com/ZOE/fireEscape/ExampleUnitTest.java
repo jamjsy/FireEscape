@@ -1,4 +1,4 @@
-package aiyuan1996.cn.firerunning;
+package com.ZOE.FireEscape;
 
 import org.junit.Test;
 
