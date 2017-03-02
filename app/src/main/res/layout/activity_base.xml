@@ -4,9 +4,9 @@
     android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <aiyuan1996.cn.firerunning.widget.NavigationBar
+    <com.ZOE.FireEscape.widget.NavigationBar
         android:id="@+id/navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="50dp">
-    </aiyuan1996.cn.firerunning.widget.NavigationBar>
+    </com.ZOE.FireEscape.widget.NavigationBar>
 </RelativeLayout>

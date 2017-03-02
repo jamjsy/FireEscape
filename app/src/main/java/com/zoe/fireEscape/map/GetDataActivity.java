@@ -1,4 +1,4 @@
-package aiyuan1996.cn.firerunning.map;
+package com.ZOE.FireEscape.map;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,16 +11,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.ZOE.FireEscape.R;
+import com.ZOE.FireEscape.Utils.ActivityCollector;
+import com.ZOE.FireEscape.Utils.Database;
 import com.fengmap.android.analysis.navi.FMNaviAnalyser;
 import com.fengmap.android.map.FMPickMapCoordResult;
 import com.fengmap.android.map.event.OnFMMapClickListener;
 import com.fengmap.android.map.geometry.FMMapCoord;
 
 import java.util.List;
-
-import aiyuan1996.cn.firerunning.R;
-import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
-import aiyuan1996.cn.firerunning.Utils.UserService;
 
 
 /**
@@ -34,7 +33,6 @@ import aiyuan1996.cn.firerunning.Utils.UserService;
 public class GetDataActivity extends BaseActivity implements OnFMMapClickListener {
 
     private  double RouteLength1,RouteLength2;
-    private UserService userService;
     //wifi对象的定义及实现
     private String wserviceName = Context.WIFI_SERVICE;
     private WifiManager wm;
@@ -49,14 +47,15 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
     private double left=0,top=0;
     private double correctL=12150000;
     private double correctT=4070000;
+    Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_getdata);
         ActivityCollector.addActivity(this);
-        userService=new UserService(this);
         mFMMap.setOnFMMapClickListener(this);
+        db=new Database(this);
         wm = (WifiManager) getSystemService(wserviceName);
         //wm.startScan();
     }
@@ -153,65 +152,23 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
 
         @Override
         public void onReceive(Context arg0, Intent intent)
+        { if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
         {
-            if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+            wm.startScan();
+            List<ScanResult> results = wm.getScanResults();
+            //mac地址查重和插入
+            for (ScanResult result : results)
             {
-                if(n<10) {
-                wm.startScan();
-                List<ScanResult> results = wm.getScanResults();
-                if(flag==0)
-                {
-                    //将mac地址存入mac数据表中
-                    if (userService.Flag() == false) {
-                        String[] mac = {null, null, null, null, null, null, null, null, null, null};
-                        int t = 0;
-                        //Log.d("WIFI记录", "OnInitClick: "+results.size());
-                        for (ScanResult result : results) {
-                            if (t < 10)//防止数组越界
-                            {
-                                mac[t] = new String(result.BSSID);
-                                Log.d("数据库", "OnInitClick: " + mac[t]);
-                                t++;
-                            }
-                        }
-                        Toast.makeText(GetDataActivity.this, userService.AddMAC(mac[0], mac[1], mac[2], mac[3], mac[4], mac[5], mac[6], mac[7], mac[8], mac[9]), Toast.LENGTH_SHORT).show();
-                    }
-                }
-                    flag = 1;
-                    //将10组值存入校正变量中
-                    for (ScanResult result : results) {
-                        if (userService.FindSub(result.BSSID) >= 0)
-                            correct[n][userService.FindSub(result.BSSID)] = result.level;
-                    }
-                    Toast.makeText(GetDataActivity.this, "第" + (n + 1) + "次采样成功，剩余" + (9 - n) + "次，请耐心等待，此过程中尽量不要移动手机", Toast.LENGTH_SHORT).show();
-                    n++;
-                }
-                if(n==10)
-                {
-                    //输出correct的结果
-                    String string = "\n";
-                    for(int i=0;i<10;i++)
-                    {
-                        for(int j=0;j<10;j++)
-                        {
-                            string+=correct[i][j];
-                            string+="  ";
-                        }
-                        string+="\n";
-                    }
-                    Log.d("校正", "onReceive: "+string);
-                    //将结果插入数据库
-                    for(int i=0;i<10;i++)
-                    {
-                        location[i]=Average(correct,i);
-                    }
-                    Toast.makeText(GetDataActivity.this, userService.AddLocation(	location[0], location[1], location[2], location[3], location[4],
-                            location[5], location[6], location[7], location[8], location[9],
-                            left,top), Toast.LENGTH_SHORT).show();
-                    n=0;//用完归零
-                    unregisterReceiver(wifiReceiver);
-                }
+                db.AddMAC(result.BSSID);
             }
+            db.AddCoord(left,top);
+            for (ScanResult result : results)
+            {
+                db.AddRssi(result.BSSID,result.level);
+            }
+            unregisterReceiver(wifiReceiver);
+            Toast.makeText(GetDataActivity.this, "插入成功", Toast.LENGTH_SHORT).show();
+        }
         }
 
     };
