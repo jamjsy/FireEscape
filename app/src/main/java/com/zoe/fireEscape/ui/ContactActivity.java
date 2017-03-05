@@ -1,4 +1,4 @@
-package aiyuan1996.cn.firerunning.ui;
+package com.ZOE.FireEscape.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -31,17 +31,17 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ZOE.FireEscape.R;
+import com.ZOE.FireEscape.Utils.ActivityCollector;
+import com.ZOE.FireEscape.Utils.PingYinUtil;
+import com.ZOE.FireEscape.Utils.PinyinComparator;
+import com.ZOE.FireEscape.entity.Info;
+import com.ZOE.FireEscape.ui.view.SideBar;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
-import aiyuan1996.cn.firerunning.R;
-import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
-import aiyuan1996.cn.firerunning.Utils.PingYinUtil;
-import aiyuan1996.cn.firerunning.Utils.PinyinComparator;
-import aiyuan1996.cn.firerunning.entity.Info;
-import aiyuan1996.cn.firerunning.ui.view.SideBar;
 
 public class ContactActivity extends Activity implements OnScrollListener, OnItemClickListener, OnItemLongClickListener {
 	/** Called when the activity is first created. */
@@ -87,7 +87,6 @@ public class ContactActivity extends Activity implements OnScrollListener, OnIte
 
 	@Override
 	public void onBackPressed() {
-		//ActivityCollector.removeActivity(this);
 		finish();
 	}
 

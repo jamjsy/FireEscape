@@ -48,6 +48,8 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
     private double correctL=12150000;
     private double correctT=4070000;
     Database db;
+    //立一个flag看当前采样是否完毕
+    boolean flagGetDataFinished=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,15 +154,18 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
 
         @Override
         public void onReceive(Context arg0, Intent intent)
-        { if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+        {
+
+            flagGetDataFinished=false;
+            if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
         {
             wm.startScan();
             List<ScanResult> results = wm.getScanResults();
             //mac地址查重和插入
             for (ScanResult result : results)
             {
-                db.AddMAC(result.BSSID);
-            }
+            db.AddMAC(result.BSSID);
+        }
             db.AddCoord(left,top);
             for (ScanResult result : results)
             {
@@ -168,10 +173,15 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
             }
             unregisterReceiver(wifiReceiver);
             Toast.makeText(GetDataActivity.this, "插入成功", Toast.LENGTH_SHORT).show();
+            flagGetDataFinished=true;
         }
         }
 
     };
+    public boolean isGetdataFinished()
+    {
+        return flagGetDataFinished;
+    }
     //q求二维数组第n列的平均值
     public int Average(int[][] array,int n)
     {
@@ -228,6 +238,7 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
     public void onBackPressed()
     {
         mFMMap.onDestroy();
+        LocateActivity.init=true;
         startActivity(new Intent(GetDataActivity.this,LocateActivity.class));
         this.finish();
     }
