@@ -1,4 +1,4 @@
-package com.ZOE.FireEscape.map;
+package com.ZOE.FireEscape.ui.Map;
 
 import android.Manifest;
 import android.app.Activity;
@@ -35,7 +35,7 @@ import android.widget.Toast;
 
 import com.ZOE.FireEscape.R;
 import com.ZOE.FireEscape.Utils.ActivityCollector;
-import com.ZOE.FireEscape.Utils.Database;
+import com.ZOE.FireEscape.Utils.database.Database;
 import com.ZOE.FireEscape.Utils.LocateMethutils;
 import com.ZOE.FireEscape.Utils.PushUtil;
 import com.ZOE.FireEscape.Utils.ToastUtils;
@@ -84,7 +84,6 @@ public class LocateActivity extends BaseActivity{
     private double correctT=4070000;
     private LocateMethutils meutils;
     private long mExitTime = 0;
-
     CircleImageView userImage;
     TextView tel;
     private android.support.v7.app.AlertDialog photoDialog;
@@ -141,8 +140,6 @@ public class LocateActivity extends BaseActivity{
         int id = item.getItemId();
         Intent intent;
         if (id == R.id.nav_contacts) {
-            //Log.d(TAG, "onNavigationItemSelected: nav_contacts"  );
-            //Toast.makeText(this,"nav_contacts",Toast.LENGTH_SHORT).show();
             startActivity(new Intent(LocateActivity.this, ContactActivity.class));
         } else if (id == R.id.nav_getdata) {
             mFMMap.onDestroy();
@@ -303,8 +300,7 @@ public class LocateActivity extends BaseActivity{
         ActivityCollector.removeActivity(this);
         finish();
     }
-
-      @Override
+    @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
       if (keyCode == KeyEvent.KEYCODE_BACK) {
           if ((System.currentTimeMillis() - mExitTime) > 2000) {//

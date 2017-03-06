@@ -56,7 +56,7 @@
             android:label="@string/push_setting"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.ZOE.FireEscape.map.LocateActivity"
+            android:name="com.ZOE.FireEscape.ui.Map.LocateActivity"
             android:label="地图" />
         <activity
             android:name="com.ZOE.FireEscape.ui.PushActivity.TestActivity"
@@ -81,7 +81,7 @@
             android:name="com.ZOE.FireEscape.ui.PushActivity.webViewActivity"
             android:label="@string/push_history" />
         <activity
-            android:name="com.ZOE.FireEscape.map.GetDataActivity"/>
+            android:name="com.ZOE.FireEscape.ui.Map.GetDataActivity"/>
 
         <activity
             android:name="com.ZOE.FireEscape.ui.SettingsActivity"

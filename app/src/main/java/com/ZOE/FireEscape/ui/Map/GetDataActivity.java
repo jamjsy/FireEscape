@@ -1,4 +1,4 @@
-package com.ZOE.FireEscape.map;
+package com.ZOE.FireEscape.ui.Map;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.ZOE.FireEscape.R;
 import com.ZOE.FireEscape.Utils.ActivityCollector;
-import com.ZOE.FireEscape.Utils.Database;
+import com.ZOE.FireEscape.Utils.database.Database;
 import com.fengmap.android.analysis.navi.FMNaviAnalyser;
 import com.fengmap.android.map.FMPickMapCoordResult;
 import com.fengmap.android.map.event.OnFMMapClickListener;

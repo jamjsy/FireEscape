@@ -6,10 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +23,6 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
@@ -45,7 +42,6 @@ import java.util.Set;
 
 public class ContactActivity extends Activity implements OnScrollListener, OnItemClickListener, OnItemLongClickListener {
 	/** Called when the activity is first created. */
-
 	private ListView lvContact;
 	private SideBar indexBar;
 	private WindowManager mWindowManager;
@@ -53,10 +49,6 @@ public class ContactActivity extends Activity implements OnScrollListener, OnIte
 	protected Map<String, Info> list = new HashMap<String, Info>();
 	public static Map<Integer, String> p2s = new HashMap<Integer, String>();
 	public static String[] mNicks;
-	private int scrollState; // 滚动的状态
-	private Handler handler;
-	private DisapearThread disapearThread;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,8 +56,6 @@ public class ContactActivity extends Activity implements OnScrollListener, OnIte
 		ActivityCollector.addActivity(this);
 		mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
 		list = getContacts();
-		handler = new Handler();
-		disapearThread = new DisapearThread();
 		findView();
 	}
 
@@ -79,52 +69,23 @@ public class ContactActivity extends Activity implements OnScrollListener, OnIte
 		indexBar.setListView(lvContact);
 		txtOverlay = (TextView) LayoutInflater.from(ContactActivity.this).inflate(R.layout.list_position, null);
 		txtOverlay.setVisibility(View.INVISIBLE);
-		WindowManager.LayoutParams lp = new WindowManager.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.TYPE_APPLICATION,
-				WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
-		mWindowManager.addView(txtOverlay, lp);
 		indexBar.setTextView(txtOverlay);
 	}
 
 	@Override
-	public void onBackPressed() {
-		this.finish();
+	protected void onDestroy()
+	{
+		//mWindowManager.removeView(txtOverlay);
+		super.onDestroy();
 	}
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-		if (mNicks != null && mNicks.length > 0)
-			txtOverlay.setText(String.valueOf(PingYinUtil.converterToFirstSpell(mNicks[firstVisibleItem + (visibleItemCount >> 1)]).charAt(0)).toUpperCase());
 	}
 
-//	private long mExitTime = 0;
-//	@Override
-//	public boolean onKeyDown(int keyCode, KeyEvent event) {
-//		if (keyCode == KeyEvent.KEYCODE_BACK) {
-//			if ((System.currentTimeMillis() - mExitTime) > 2000) {//
-//				// 如果两次按键时间间隔大于2000毫秒，则不退出
-//				Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
-//				mExitTime = System.currentTimeMillis();// 更新mExitTime
-//			} else {
-//				System.exit(0);// 否则退出程序
-//			}
-//			return true;
-//		}
-//		return super.onKeyDown(keyCode, event);
-//
-//	}
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-		this.scrollState = scrollState;
-		if (scrollState == ListView.OnScrollListener.SCROLL_STATE_IDLE)
-		{
-			handler.removeCallbacks(disapearThread);
-			// 提示延迟1s再消失
-			handler.postDelayed(disapearThread, 1000);
-		} else
-		{
-			txtOverlay.setVisibility(View.VISIBLE);
-		}
 	}
 
 	private Map<String, Info> getContacts() {
@@ -167,16 +128,6 @@ public class ContactActivity extends Activity implements OnScrollListener, OnIte
 			e.printStackTrace();
 		}
 		return map;
-	}
-
-	private class DisapearThread implements Runnable {
-		public void run() {
-			// 避免在1.5s内，用户再次拖动时提示框又执行隐藏命令。
-			if (scrollState == ListView.OnScrollListener.SCROLL_STATE_IDLE)
-			{
-				txtOverlay.setVisibility(View.INVISIBLE);
-			}
-		}
 	}
 
 	static class ContactAdapter extends BaseAdapter implements SectionIndexer {
@@ -355,7 +306,6 @@ public class ContactActivity extends Activity implements OnScrollListener, OnIte
 					}
 				}).create();
 		diamondAl.show();
-		
 		return false;
 	}
 }

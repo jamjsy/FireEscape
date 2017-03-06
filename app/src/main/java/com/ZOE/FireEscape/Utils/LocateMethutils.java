@@ -5,6 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.ScanResult;
 
+import com.ZOE.FireEscape.Utils.database.DBHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package aiyuan1996.cn.firerunning.ui.UserActivity;
+package com.ZOE.FireEscape.ui.UserActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,13 +10,14 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import aiyuan1996.cn.firerunning.R;
-import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
-import aiyuan1996.cn.firerunning.Utils.SPUtils;
-import aiyuan1996.cn.firerunning.Utils.ToastUtils;
-import aiyuan1996.cn.firerunning.entity.UserEntity;
-import aiyuan1996.cn.firerunning.map.LocateActivity;
-import aiyuan1996.cn.firerunning.ui.view.CustomDialog;
+import com.ZOE.FireEscape.R;
+import com.ZOE.FireEscape.Utils.ActivityCollector;
+import com.ZOE.FireEscape.Utils.SPUtils;
+import com.ZOE.FireEscape.Utils.ToastUtils;
+import com.ZOE.FireEscape.entity.UserEntity;
+import com.ZOE.FireEscape.ui.Map.LocateActivity;
+import com.ZOE.FireEscape.ui.view.CustomDialog;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

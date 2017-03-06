@@ -1,4 +1,4 @@
-package com.ZOE.FireEscape.map;
+package com.ZOE.FireEscape.ui.Map;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,9 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+
 import com.ZOE.FireEscape.R;
 import com.ZOE.FireEscape.Utils.ActivityCollector;
-import com.ZOE.FireEscape.Utils.FileUtils;
+import com.ZOE.FireEscape.Utils.FileOperation.FileUtils;
 import com.ZOE.FireEscape.Utils.ViewHelper;
 import com.ZOE.FireEscape.widget.NavigationBar;
 import com.fengmap.android.analysis.navi.FMNaviAnalyser;
@@ -28,6 +29,7 @@ import com.fengmap.android.map.layer.FMLineLayer;
 import com.fengmap.android.map.marker.FMImageMarker;
 import com.fengmap.android.map.marker.FMLineMarker;
 import com.fengmap.android.map.marker.FMSegment;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -116,9 +118,10 @@ public abstract class BaseActivity extends Activity implements OnFMMapInitListen
         mFMMap = mMapView.getFMMap();
         mFMMap.setOnFMMapInitListener(this);
         //加载地图数据
-        mFMMap.openMapById("xust-18-2",true);
+        //mFMMap.openMapById("xust-18-2",true);
+        String path = FileUtils.getDefaultMapPath(this);
+        mFMMap.openMapByPath(path);
     }
-
     /**
      * 添加布局
      *
@@ -145,7 +148,7 @@ public abstract class BaseActivity extends Activity implements OnFMMapInitListen
 
         //导航分析
         try {
-            mNaviAnalyser = FMNaviAnalyser.getFMNaviAnalyserById("xust-18-2");
+            mNaviAnalyser = FMNaviAnalyser.getFMNaviAnalyserById(FileUtils.DEFAULT_MAP_ID);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (FMObjectException e) {

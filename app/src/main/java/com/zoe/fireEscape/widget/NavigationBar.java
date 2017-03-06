@@ -10,8 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ZOE.FireEscape.R;
-import com.ZOE.FireEscape.map.GetDataActivity;
-import com.ZOE.FireEscape.map.LocateActivity;
+import com.ZOE.FireEscape.ui.Map.GetDataActivity;
+import com.ZOE.FireEscape.ui.Map.LocateActivity;
 
 /**
  * @Email hezutao@fengmap.com

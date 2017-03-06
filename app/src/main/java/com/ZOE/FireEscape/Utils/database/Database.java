@@ -1,4 +1,4 @@
-package com.ZOE.FireEscape.Utils;
+package com.ZOE.FireEscape.Utils.database;
 
 import android.content.Context;
 import android.database.Cursor;

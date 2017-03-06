@@ -1,4 +1,4 @@
-package aiyuan1996.cn.firerunning.Receiver;
+package com.ZOE.FireEscape.Receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,6 +7,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.ZOE.FireEscape.Utils.PushUtil;
+import com.ZOE.FireEscape.entity.HistoryUrl;
+import com.ZOE.FireEscape.ui.Map.LocateActivity;
+import com.ZOE.FireEscape.ui.PushActivity.TestActivity;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,10 +19,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
 
-import aiyuan1996.cn.firerunning.Utils.PushUtil;
-import aiyuan1996.cn.firerunning.entity.HistoryUrl;
-import aiyuan1996.cn.firerunning.map.LocateActivity;
-import aiyuan1996.cn.firerunning.ui.PushActivity.TestActivity;
 import cn.jpush.android.api.JPushInterface;
 
 /**
