@@ -19,6 +19,7 @@ import com.fengmap.android.map.FMPickMapCoordResult;
 import com.fengmap.android.map.event.OnFMMapClickListener;
 import com.fengmap.android.map.geometry.FMMapCoord;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -83,7 +84,7 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
             Log.d("存入的坐标", ""+left+"    "+top);
             stGroupId = mapCoordResult.getGroupId();
             createStartImageMarker();
-           // return;
+            // return;
         }
 
 
@@ -110,7 +111,7 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
 
             endGroupId = stGroupId;
         }
-         /**
+        /**
          * 从两条出口选择距离较近的一条
          *
          */
@@ -130,7 +131,7 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
             else
             {
                 mNaviAnalyser.analyzeNavi(stGroupId, stCoord, endGroupId, endCoord1,
-                    FMNaviAnalyser.FMNaviModule.MODULE_SHORTEST);
+                        FMNaviAnalyser.FMNaviModule.MODULE_SHORTEST);
                 createEndImageMarker(endCoord1);
                 addLineMarker();}
         }
@@ -151,33 +152,92 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
     //注册广播事件
     private final BroadcastReceiver wifiReceiver = new BroadcastReceiver()
     {
-
+        int n=0;
+        //临时的mac，rssi，坐标x，y
+        List<String> mac=new ArrayList<String>();
+        List<int[]> rssi= new ArrayList<int[]>();
+        int[] temp;
+        int[] tempRssi=new int[10];
+        double asix,asiy;
+        boolean flag;
+        
+        String string="";
         @Override
         public void onReceive(Context arg0, Intent intent)
         {
-
             flagGetDataFinished=false;
+            flag=true;
             if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
-        {
-            wm.startScan();
-            List<ScanResult> results = wm.getScanResults();
-            //mac地址查重和插入
-            for (ScanResult result : results)
             {
-            db.AddMAC(result.BSSID);
-        }
-            db.AddCoord(left,top);
-            for (ScanResult result : results)
-            {
-                db.AddRssi(result.BSSID,result.level);
+                wm.startScan();
+                List<ScanResult> results = wm.getScanResults();
+                if(n==0)
+                {
+                    for(ScanResult result : results)
+                    {
+                        mac.add(result.BSSID);
+                    }
+                    temp=new int[mac.size()];
+                }
+                for(int i=0;i<mac.size();i++)
+                {
+                    for(ScanResult result : results)
+                    {
+                        if( result.BSSID.equals(mac.get(i)) )
+                        {
+                            temp[i]=result.level;
+                            string+=temp[i]+"    ";
+                            flag=false;
+                        }
+                    }
+                    if(flag)
+                    {
+                        temp[i]=0;
+                        string+=temp[i]+"    ";
+                    }
+                    rssi.add(temp);
+                }
             }
-            unregisterReceiver(wifiReceiver);
-            Toast.makeText(GetDataActivity.this, "插入成功", Toast.LENGTH_SHORT).show();
-            flagGetDataFinished=true;
+            Log.d("查看", "onReceive: "+string);
+            string="";
+            Toast.makeText(GetDataActivity.this, ""+(n+1), Toast.LENGTH_SHORT).show();
+            n++;
+            if(n==10)
+            {
+                //mac地址查重和插入
+                for (int i=0;i<mac.size();i++)
+                {
+                    db.AddMAC(mac.get(i));
+                }
+                db.AddCoord(left,top);
+                for (int i=0;i<mac.size();i++)
+                {
+                    for (int j=0;j<10;j++)
+                    {
+                            tempRssi[j]=rssi.get(j)[i];
+                    }
+                    db.AddRssi( mac.get(i) , Average(tempRssi));
+                }
+                Toast.makeText(GetDataActivity.this, "插入成功", Toast.LENGTH_SHORT).show();
+                flagGetDataFinished=true;
+                unregisterReceiver(wifiReceiver);
+            }
         }
-        }
-
     };
+    public int Average(int[] rssi)
+    {
+        int n=0;
+        int total=0;
+        for(int i=0;i<10;i++)
+        {
+            if(rssi[i]!=0)
+            {
+                total+=rssi[i];
+                n++;
+            }
+        }
+        return (total/n);
+    }
     public boolean isGetdataFinished()
     {
         return flagGetDataFinished;

@@ -35,14 +35,15 @@ import android.widget.Toast;
 
 import com.ZOE.FireEscape.R;
 import com.ZOE.FireEscape.Utils.ActivityCollector;
-import com.ZOE.FireEscape.Utils.database.Database;
 import com.ZOE.FireEscape.Utils.LocateMethutils;
 import com.ZOE.FireEscape.Utils.PushUtil;
 import com.ZOE.FireEscape.Utils.ToastUtils;
+import com.ZOE.FireEscape.Utils.database.Database;
 import com.ZOE.FireEscape.entity.UserEntity;
 import com.ZOE.FireEscape.ui.ContactActivity;
 import com.ZOE.FireEscape.ui.PushActivity.webViewActivity;
 import com.ZOE.FireEscape.ui.SettingsActivity;
+import com.ZOE.FireEscape.widget.MyDialog;
 import com.bumptech.glide.Glide;
 import com.fengmap.android.analysis.navi.FMNaviAnalyser;
 import com.fengmap.android.map.geometry.FMMapCoord;
@@ -62,7 +63,6 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 import de.hdodenhof.circleimageview.CircleImageView;
-
 
 /**
  * @Email hezutao@fengmap.com
@@ -96,6 +96,7 @@ public class LocateActivity extends BaseActivity{
     public static boolean isForeground = false;
     private Database db;
     private Double point[]=new Double[2];
+    private boolean isHere=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +145,9 @@ public class LocateActivity extends BaseActivity{
         } else if (id == R.id.nav_getdata) {
             mFMMap.onDestroy();
             startActivity(new Intent(LocateActivity.this,GetDataActivity.class));
-            unregisterReceiver(wifiReceiver);
+            if(db.init()&&isHere)
+                unregisterReceiver(wifiReceiver);
+            unregisterReceiver(mMessageReceiver);
             this.finish();
         }else if (id == R.id.nav_push) {
             intent = new Intent(LocateActivity.this,webViewActivity.class);
@@ -485,18 +488,24 @@ public class LocateActivity extends BaseActivity{
         @Override
         public void onReceive(Context arg0, Intent intent)
         {
-
             if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
             {
                 wm.startScan();
                 List<ScanResult> results = wm.getScanResults();
-                //mac地址查重和插入
                  int  col=   meutils.Comper(results);
-                 point =db.GetPoint(col);
-                setStart(point[0],point[1]);
-                //Log.d(TAG, "onReceive: "+point[0]+"   "+point[1]);
+                //找不到任何匹配的点
+                 if(col==0)
+                 {
+                     isHere=false;
+                     unregisterReceiver(wifiReceiver);
+                     (new MyDialog()).show(getFragmentManager(), "my dialog");
+                 }
+                else {
+                     point = db.GetPoint(col);
+                     setStart(point[0], point[1]);
+                 }
+                     //Log.d(TAG, "onReceive: "+point[0]+"   "+point[1]);
                // Toast.makeText(LocateActivity.this,""+p.x+" "+p.y,Toast.LENGTH_LONG).show();
-
             }
         }
     };

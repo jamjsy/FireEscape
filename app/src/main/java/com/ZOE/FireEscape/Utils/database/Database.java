@@ -92,9 +92,11 @@ public class Database {
 		Cursor cus=null;
 		try {
 			cus = sd.rawQuery("select * from rssi where id=?", new String[]{col + ""});
-			cus.moveToFirst();
-			point[0] = cus.getDouble(cus.getColumnIndex("x"));
-			point[1] = cus.getDouble(cus.getColumnIndex("y"));
+			if(cus.moveToFirst())
+			{
+				point[0] = cus.getDouble(cus.getColumnIndex("x"));
+				point[1] = cus.getDouble(cus.getColumnIndex("y"));
+			}
 			cus.close();
 			sd.close();
 		}catch(SQLiteConstraintException e){

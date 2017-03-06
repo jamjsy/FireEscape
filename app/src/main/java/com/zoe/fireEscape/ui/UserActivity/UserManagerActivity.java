@@ -1,4 +1,4 @@
-package aiyuan1996.cn.firerunning.ui.UserActivity;
+package com.ZOE.FireEscape.ui.UserActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +8,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import aiyuan1996.cn.firerunning.R;
-import aiyuan1996.cn.firerunning.Utils.ActivityCollector;
+import com.ZOE.FireEscape.R;
+import com.ZOE.FireEscape.Utils.ActivityCollector;
 
 public class UserManagerActivity extends AppCompatActivity {
     private ListView listView;
@@ -32,8 +32,7 @@ public class UserManagerActivity extends AppCompatActivity {
                     intent = new Intent(UserManagerActivity.this,ChangePasswordActivity.class);
                     startActivity(intent);
                 }else if (position == 1){
-                    ActivityCollector.finishAll();
-                    //System.exit(0);
+
                 }
             }
         });
