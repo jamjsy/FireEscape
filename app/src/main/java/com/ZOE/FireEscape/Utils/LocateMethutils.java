@@ -16,7 +16,6 @@ public class LocateMethutils {
     private DBHelper db;
     private SQLiteDatabase sd;
     List list=new ArrayList();
-    private int mix;
     private double value;
     private List saverssi=new ArrayList();
     public LocateMethutils(Context context){
@@ -24,6 +23,7 @@ public class LocateMethutils {
         sd=db.getReadableDatabase();
 }
 public  int Comper(List<ScanResult> results){
+    int mix=0;
     Cursor c = sd.rawQuery("select * from mac", null);
     Cursor currssi = sd.rawQuery("select * from rssi", null);
     value=1000;
@@ -57,9 +57,8 @@ public  int Comper(List<ScanResult> results){
         }
         list.clear();
         saverssi.clear();
-        mix=0;
     }
-    return  j;
+    return  mix;
 }
     public static double GetA(double input, List<Double> scans) {
         double temp = 1.0 / input;

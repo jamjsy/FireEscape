@@ -103,13 +103,13 @@ public class Database {
 		}
 		return point;
 	}
-public boolean init(){
+public  boolean init(){
 	sd = db.getWritableDatabase();
 	Cursor cus= sd.rawQuery("select x from rssi",null);
-	if(cus!=null){
+	if(cus.moveToNext()){
 		cus.close();
 		sd.close();
-	return true;
+		return true;
 	}
 	cus.close();
 	sd.close();

@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ import android.widget.Toast;
 
 import com.ZOE.FireEscape.R;
 import com.ZOE.FireEscape.Utils.ActivityCollector;
+import com.ZOE.FireEscape.Utils.Database;
+import com.ZOE.FireEscape.Utils.LocateMethutils;
 import com.ZOE.FireEscape.Utils.PushUtil;
 import com.ZOE.FireEscape.Utils.ToastUtils;
 import com.ZOE.FireEscape.entity.UserEntity;
@@ -51,6 +54,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -71,24 +75,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class LocateActivity extends BaseActivity{
 
     private static final String TAG = "LocateActivity";
-
+     public static boolean init=false;
     double RouteLength1,RouteLength2;
     //wifi服务
     private String wserviceName = Context.WIFI_SERVICE;
     private WifiManager wm;
-    private TextView textview;
-    //定义一个数组来存放结果
-    private double[] resleft = new double[10];
-    private double[] restop = new double[10];
-    //定义初始坐标
-    public  double left=0;
-    public  double top=0;
-    //定义一个数组，提高精确度
-    private double[] positionleft = new double[10];
-    private double[] positiontop = new double[10];
     private double correctL=12150000;
     private double correctT=4070000;
-
+    private LocateMethutils meutils;
     private long mExitTime = 0;
 
     CircleImageView userImage;
@@ -101,7 +95,8 @@ public class LocateActivity extends BaseActivity{
     private static final int REQUEST_BLUETOOTH_PERMISSION = 10;
     private File tempFile = null;
     public static boolean isForeground = false;
-
+    private Database db;
+    private Double point[]=new Double[2];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,9 +109,13 @@ public class LocateActivity extends BaseActivity{
 
         //WiFiManager初始化
         wm = (WifiManager) getSystemService(wserviceName);
+        db=new Database(this);
         wm.startScan();
         //注册WiFi监听器
-        registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        if(db.init())
+        {
+            registerReceiver(wifiReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.drawer_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -125,6 +124,7 @@ public class LocateActivity extends BaseActivity{
         String telString = getIntent().getStringExtra("tel");
         tel = (TextView)navHeaderView.findViewById(R.id.tel);
         tel.setText(telString);
+        meutils=new LocateMethutils(this);
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,19 +140,14 @@ public class LocateActivity extends BaseActivity{
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Intent intent;
-        //Context context = getApplicationContext();
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-            Toast.makeText(this,"nav_camera",Toast.LENGTH_SHORT).show();
-
-        } else if (id == R.id.nav_contacts) {
+        if (id == R.id.nav_contacts) {
             //Log.d(TAG, "onNavigationItemSelected: nav_contacts"  );
             //Toast.makeText(this,"nav_contacts",Toast.LENGTH_SHORT).show();
-            intent = new Intent(LocateActivity.this, ContactActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(LocateActivity.this, ContactActivity.class));
         } else if (id == R.id.nav_getdata) {
             mFMMap.onDestroy();
             startActivity(new Intent(LocateActivity.this,GetDataActivity.class));
+            unregisterReceiver(wifiReceiver);
             this.finish();
         }else if (id == R.id.nav_push) {
             intent = new Intent(LocateActivity.this,webViewActivity.class);
@@ -185,7 +180,7 @@ public class LocateActivity extends BaseActivity{
         }
     }
 
-    private void SetStart(double x, double y) {
+    private void setStart(double x, double y) {
        // Log.d("是否执行", "onMapClick: "+x);
         // 获取屏幕点击位置的地图坐标
         // 起点
@@ -287,13 +282,6 @@ public class LocateActivity extends BaseActivity{
     }
 
     @Override
-    protected void onDestroy() {
-        unregisterReceiver(mMessageReceiver);
-        unregisterReceiver(wifiReceiver);
-        super.onDestroy();
-        ActivityCollector.removeActivity(this);
-    }
-    @Override
     protected void onResume() {
         onStart();
         isForeground = true;
@@ -308,17 +296,13 @@ public class LocateActivity extends BaseActivity{
     }
 
 
-//    @Override
-//    public void onBackPressed() {
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        if (drawer.isDrawerOpen(GravityCompat.START)) {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else {
-//            super.onBackPressed();
-//        }
-//        ActivityCollector.finishAll();
-//    }
-
+    @Override
+    public void onBackPressed() {
+        unregisterReceiver(mMessageReceiver);
+        mFMMap.onDestroy();
+        ActivityCollector.removeActivity(this);
+        finish();
+    }
 
       @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -334,7 +318,6 @@ public class LocateActivity extends BaseActivity{
       }
           ActivityCollector.finishAll();
       return super.onKeyDown(keyCode, event);
-
   }
 
     public final Activity getActivity(){
@@ -483,7 +466,7 @@ public class LocateActivity extends BaseActivity{
         int type2 = mNaviAnalyser.analyzeNavi(stGroupId, stCoord, endGroupId, endCoord2,
                 FMNaviAnalyser.FMNaviModule.MODULE_SHORTEST);
         RouteLength2=mNaviAnalyser.getSceneRouteLength();
-        Log.d("出错原因", "analyzeNavigation: "+type1+""+type2);
+        //Log.d("出错原因", "analyzeNavigation: "+type1+""+type2);
         if (    type1 == FMNaviAnalyser.FMRouteCalcuResult.ROUTE_SUCCESS &&
                 type2 == FMNaviAnalyser.FMRouteCalcuResult.ROUTE_SUCCESS) {
             if (RouteLength1>=RouteLength2) {
@@ -499,31 +482,7 @@ public class LocateActivity extends BaseActivity{
         }
     }
 
-    //找出数组中出现次数最多的数
-    private double FindMost(double[] array)
-    {
-        double[] temparray={0,0,0,0,0,0,0,0,0,0};
-        for(int i=0;i<10;i++)
-        {
-            for(int j=0;j<10;j++)
-            {
-                if(array[i]==array[j] && array[i]!=0)
-                    temparray[i]++;
-            }
-        }
-
-        //找出出现频率较高的坐标值
-        int temp=0;
-        for(int i=0;i<10;i++)
-        {
-            if(temparray[i]>temp)
-                temp=i;
-        }
-
-        return array[temp];
-    }
-
-    //广播
+    //扫描wifi的广播
     private final BroadcastReceiver wifiReceiver = new BroadcastReceiver()
     {
 
@@ -531,12 +490,23 @@ public class LocateActivity extends BaseActivity{
         public void onReceive(Context arg0, Intent intent)
         {
 
+            if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
+            {
+                wm.startScan();
+                List<ScanResult> results = wm.getScanResults();
+                //mac地址查重和插入
+                 int  col=   meutils.Comper(results);
+                 point =db.GetPoint(col);
+                setStart(point[0],point[1]);
+                //Log.d(TAG, "onReceive: "+point[0]+"   "+point[1]);
+               // Toast.makeText(LocateActivity.this,""+p.x+" "+p.y,Toast.LENGTH_LONG).show();
+
+            }
         }
     };
 
 
-
-    //for receive customer msg from jpush server
+    //以下是极光推送的广播
     private MessageReceiver mMessageReceiver;
     public static final String MESSAGE_RECEIVED_ACTION = "com.example.jpushdemo.MESSAGE_RECEIVED_ACTION";
     public static final String KEY_TITLE = "title";
@@ -552,7 +522,6 @@ public class LocateActivity extends BaseActivity{
     }
 
     public class MessageReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             if (MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {

@@ -87,7 +87,7 @@ public class ContactActivity extends Activity implements OnScrollListener, OnIte
 
 	@Override
 	public void onBackPressed() {
-		finish();
+		this.finish();
 	}
 
 	@Override
