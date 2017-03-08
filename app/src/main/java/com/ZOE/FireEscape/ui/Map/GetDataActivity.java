@@ -155,9 +155,9 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
         int n=0;
         //临时的mac，rssi，坐标x，y
         List<String> mac=new ArrayList<String>();
-        List<int[]> rssi= new ArrayList<int[]>();
-        int[] temp;
-        int[] tempRssi=new int[10];
+        List<List<Integer>> rssi= new ArrayList<List<Integer> >();
+        List<Integer> temp=new ArrayList<Integer>();
+        List<Integer> tempRssi=new ArrayList<Integer>();
         double asix,asiy;
         boolean flag;
         
@@ -177,7 +177,6 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
                     {
                         mac.add(result.BSSID);
                     }
-                    temp=new int[mac.size()];
                 }
                 for(int i=0;i<mac.size();i++)
                 {
@@ -185,15 +184,15 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
                     {
                         if( result.BSSID.equals(mac.get(i)) )
                         {
-                            temp[i]=result.level;
-                            string+=temp[i]+"    ";
+                            temp.add(result.level);
+                            string+=temp.get(i)+"    ";
                             flag=false;
                         }
                     }
                     if(flag)
                     {
-                        temp[i]=0;
-                        string+=temp[i]+"    ";
+                        temp.add(0);
+                        string+=temp.get(i)+"    ";
                     }
                     rssi.add(temp);
                 }
@@ -210,11 +209,12 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
                     db.AddMAC(mac.get(i));
                 }
                 db.AddCoord(left,top);
+                Log.d("rssi", "onReceive: "+rssi.get(0).toArray() );
                 for (int i=0;i<mac.size();i++)
                 {
                     for (int j=0;j<10;j++)
                     {
-                            tempRssi[j]=rssi.get(j)[i];
+                            tempRssi.add((rssi.get(j)).get(i));
                     }
                     db.AddRssi( mac.get(i) , Average(tempRssi));
                 }
@@ -224,18 +224,20 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
             }
         }
     };
-    public int Average(int[] rssi)
+    public int Average(List<Integer> rssi)
     {
         int n=0;
         int total=0;
         for(int i=0;i<10;i++)
         {
-            if(rssi[i]!=0)
+            if(rssi.get(i)!=0)
             {
-                total+=rssi[i];
+                total+=rssi.get(i);
                 n++;
             }
         }
+        //Log.d("坐标", "Average: "   +rssi.get(0)+"  "+rssi.get(1)+"  "+rssi.get(2)+"  "+rssi.get(3)+"  "+rssi.get(4)+"  "
+         //                                       +rssi.get(5)+"  "+rssi.get(6)+"  "+rssi.get(7)+"  "+rssi.get(8)+"  "+rssi.get(9));
         return (total/n);
     }
     public boolean isGetdataFinished()

@@ -1,16 +1,12 @@
 <resources>
-    <string name="app_name">火灾逃生</string>
+    <string name="app_name">火灾逃生系统</string>
     <string name="title_activity_main">地图</string>
-
     <string name="demo_title_basemap">基本地图显示</string>
     <string name="btn_bottom_hint">请沿逃生路线逃往最近的出口!</string>
     <string name="get_data">开始采样</string>
     <string name="init">初始化</string>
-
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
     <string name="dialog_title">You must do!</string>
     <string name="dialog_message">Import map form server</string>
@@ -31,7 +27,6 @@
     <string name="text_find_password">忘记密码?</string>
     ////
     <string name="text_change_password">修改密码</string>
-
     <string name="text_phone">注册时的手机号码</string>
     <string name="text_password_again">再次输入密码</string>
     <string name="text_keep_password">记住密码</string>

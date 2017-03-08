@@ -4,7 +4,7 @@
     android:id="@+id/activity_web_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="aiyuan1996.cn.firerunning.ui.PushActivity.webViewActivity">
+    tools:context="com.ZOE.FireEscape.aiyuan1996.zoe.firerunning.ui.PushActivity.webViewActivity">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_reflush"

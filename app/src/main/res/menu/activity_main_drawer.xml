@@ -3,13 +3,13 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
             android:id="@+id/nav_contacts"
             android:icon="@drawable/ic_contacts"
             android:title="一键呼叫安全联系人" />
+        <item
+            android:id="@+id/nav_getdata"
+            android:icon="@drawable/ic_getdata"
+            android:title="采集数据" />
         <item
             android:id="@+id/nav_push"
             android:icon="@drawable/ic_push"

@@ -15,7 +15,7 @@
 		</ListView>
 
 	</LinearLayout>
-	<aiyuan1996.cn.firerunning.ui.view.SideBar
+	<com.ZOE.FireEscape.ui.view.SideBar
 	    android:id ="@+id/sideBar"  
 	    android:layout_height="wrap_content"  
 	    android:layout_width="20dp"
