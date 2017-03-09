@@ -156,12 +156,9 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
         //临时的mac，rssi，坐标x，y
         List<String> mac=new ArrayList<String>();
         List<List<Integer>> rssi= new ArrayList<List<Integer> >();
-        List<Integer> temp=new ArrayList<Integer>();
-        List<Integer> tempRssi=new ArrayList<Integer>();
+        List<Integer> tempRssi;
         double asix,asiy;
         boolean flag;
-        
-        String string="";
         @Override
         public void onReceive(Context arg0, Intent intent)
         {
@@ -169,6 +166,7 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
             flag=true;
             if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION))
             {
+                List<Integer> temp=new ArrayList<Integer>();
                 wm.startScan();
                 List<ScanResult> results = wm.getScanResults();
                 if(n==0)
@@ -178,6 +176,7 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
                         mac.add(result.BSSID);
                     }
                 }
+                //Log.d("查看", "onReceive: "+mac);
                 for(int i=0;i<mac.size();i++)
                 {
                     for(ScanResult result : results)
@@ -185,40 +184,51 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
                         if( result.BSSID.equals(mac.get(i)) )
                         {
                             temp.add(result.level);
-                            string+=temp.get(i)+"    ";
                             flag=false;
                         }
                     }
                     if(flag)
                     {
                         temp.add(0);
-                        string+=temp.get(i)+"    ";
                     }
-                    rssi.add(temp);
+                    flag=true;
                 }
+                rssi.add(temp);
             }
-            Log.d("查看", "onReceive: "+string);
-            string="";
             Toast.makeText(GetDataActivity.this, ""+(n+1), Toast.LENGTH_SHORT).show();
             n++;
+            String string="";
             if(n==10)
             {
+                for (int i=0;i<10;i++)
+                {
+                    for(int j=0;j<mac.size();j++)
+                    {
+                        string+=(rssi.get(i).get(j)+"  ");
+                    }
+                    string+="\n";
+                }
+                Log.d("查看", "onReceive: "+string);
+                n=0;
                 //mac地址查重和插入
                 for (int i=0;i<mac.size();i++)
                 {
                     db.AddMAC(mac.get(i));
                 }
                 db.AddCoord(left,top);
-                Log.d("rssi", "onReceive: "+rssi.get(0).toArray() );
                 for (int i=0;i<mac.size();i++)
                 {
+                    tempRssi=new ArrayList<Integer>();
                     for (int j=0;j<10;j++)
                     {
-                            tempRssi.add((rssi.get(j)).get(i));
+                        tempRssi.add((rssi.get(j)).get(i));
                     }
                     db.AddRssi( mac.get(i) , Average(tempRssi));
                 }
                 Toast.makeText(GetDataActivity.this, "插入成功", Toast.LENGTH_SHORT).show();
+                mac.clear();
+                rssi.clear();
+                tempRssi.clear();
                 flagGetDataFinished=true;
                 unregisterReceiver(wifiReceiver);
             }
@@ -237,7 +247,7 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
             }
         }
         //Log.d("坐标", "Average: "   +rssi.get(0)+"  "+rssi.get(1)+"  "+rssi.get(2)+"  "+rssi.get(3)+"  "+rssi.get(4)+"  "
-         //                                       +rssi.get(5)+"  "+rssi.get(6)+"  "+rssi.get(7)+"  "+rssi.get(8)+"  "+rssi.get(9));
+        //                                       +rssi.get(5)+"  "+rssi.get(6)+"  "+rssi.get(7)+"  "+rssi.get(8)+"  "+rssi.get(9));
         return (total/n);
     }
     public boolean isGetdataFinished()
