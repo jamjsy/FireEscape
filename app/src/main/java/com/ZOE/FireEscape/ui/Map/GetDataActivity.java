@@ -198,9 +198,9 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
             Toast.makeText(GetDataActivity.this, ""+(n+1), Toast.LENGTH_SHORT).show();
             n++;
             String string="";
-            if(n==10)
+            if(n==5)
             {
-                for (int i=0;i<10;i++)
+                for (int i=0;i<5;i++)
                 {
                     for(int j=0;j<mac.size();j++)
                     {
@@ -219,11 +219,12 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
                 for (int i=0;i<mac.size();i++)
                 {
                     tempRssi=new ArrayList<Integer>();
-                    for (int j=0;j<10;j++)
+                    for (int j=0;j<5;j++)
                     {
                         tempRssi.add((rssi.get(j)).get(i));
                     }
                     db.AddRssi( mac.get(i) , Average(tempRssi));
+                    //Log.d("平均值", ""+Average(tempRssi));
                 }
                 Toast.makeText(GetDataActivity.this, "插入成功", Toast.LENGTH_SHORT).show();
                 mac.clear();
@@ -237,8 +238,8 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
     public int Average(List<Integer> rssi)
     {
         int n=0;
-        int total=0;
-        for(int i=0;i<10;i++)
+        double total=0;
+        for(int i=0;i<5;i++)
         {
             if(rssi.get(i)!=0)
             {
@@ -246,9 +247,7 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
                 n++;
             }
         }
-        //Log.d("坐标", "Average: "   +rssi.get(0)+"  "+rssi.get(1)+"  "+rssi.get(2)+"  "+rssi.get(3)+"  "+rssi.get(4)+"  "
-        //                                       +rssi.get(5)+"  "+rssi.get(6)+"  "+rssi.get(7)+"  "+rssi.get(8)+"  "+rssi.get(9));
-        return (total/n);
+        return (int)Math.round(total/n);
     }
     public boolean isGetdataFinished()
     {
@@ -266,7 +265,7 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
         num=0;
         total=0;
         //找出最大最小
-        for(int j=0;j<10;j++)
+        for(int j=0;j<5;j++)
         {
             if(array[j][n]>max)
                 max=array[j][n];
@@ -274,7 +273,7 @@ public class GetDataActivity extends BaseActivity implements OnFMMapClickListene
                 min=array[j][n];
         }
         //去掉最大最小，并统计有效元素个数
-        for(int j=0;j<10;j++)
+        for(int j=0;j<5;j++)
         {
             if(array[j][n]!=0 && array[j][n]!=max && array[j][n]!=min)
             {
